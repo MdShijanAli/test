@@ -18,8 +18,8 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan yourdomain.com >> ~/.ssh/known_hosts
+          ssh-keyscan 198.54.115.120 >> ~/.ssh/known_hosts
 
       - name: Deploy via SCP
         run: |
-          scp -r ./your-project-folder/ username@yourdomain.com:/home/username/public_html/your-folder/
+          scp -r ./test/ softcaap@198.54.115.120:/home/softcaap/test/
