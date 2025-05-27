@@ -3,23 +3,29 @@ name: Deploy to cPanel
 on:
   push:
     branches:
-      - main  # or your deploy branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p 21098 198.54.115.120 >> ~/.ssh/known_hosts
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -p 21098 198.54.115.120 >> ~/.ssh/known_hosts
 
-      - name: Deploy via SCP
-        run: |
-          scp -P 21098 -r ./test/ softcaap@198.54.115.120:/home/softcaap/test/
+    - name: Test SSH connection
+      run: ssh -p 21098 softcaap@198.54.115.120 "echo SSH connection successful"
+
+    - name: Deploy via SCP
+      run: |
+        scp -P 21098 -r ./test/ softcaap@198.54.115.120:/home/softcaap/test/
+
+    - name: Test SSH connection
+      run: ssh -p 21098 softcaap@198.54.115.120 "echo SSH connection successful"
